@@ -18,7 +18,6 @@ export default class GameState {
 
   // funcion que crea una nueva partida con un tamanyo variable, comenzando con el jugador 1
   static nuevoJuego(tamanio:number, modoJuego: number, dif: number, config:any): GameState {
-    console.log("asdjh"+config['player1']);
     return new GameState(new tablero(tamanio), 1, modoJuego, dif, config);
   }
   // cada vez que se realiza un movimiento se crea un nuevo estado de juego
@@ -31,7 +30,6 @@ export default class GameState {
     this.dificultad = difi;
     this.config = config;
     this.uids = [config['player1uid'],config['player2uid']];
-    console.log("ASD"+this.uids);
   // si no hay posibles jugadas, game over... si no, se continua jugando...
     if (this.posiblesJugadas.length > 0) {
       this.gameStatus = 1;
@@ -52,7 +50,6 @@ export default class GameState {
   
   // funcion que se encarga de realizar la jugada y crear un nuevo estado de juego
   jugadaRealizada(movimiento:Array<number>): GameState {
-    //console.log(this.tableroGS.tableroJuego);
     if (this.modoJuego == 1) {
       // cuando se crea el nuevo estado de juego, se cambia el juegador...
       if ((this.turnoJugador == 1) && (this.cambioTurno(movimiento))){
@@ -77,32 +74,33 @@ export default class GameState {
           2, this.modoJuego, this.dificultad, this.config
         )
       }
+      // si se esta jugando contra la AI, se llama a la clase de AIPlayer para retornar la jugada simulando otro jugador
       else if (this.turnoJugador == 2){
         console.log("Turno AI");
         let AI: AIPlayer = new AIPlayer(this.dificultad,this);
-        //console.log(AI.getJugada());
         return new GameState(
           this.tableroGS.movida(AI.getJugada(), 2),
           1, this.modoJuego, this.dificultad, this.config
         )
       }
       else {
-        console.log("La PTM!!");
+        console.log("Movimiento Ilegal, Carebarro!");
         return this;
       }
     }
   }
 
+  // funcion que dicta si efectivamente, el movimiento enviado es correcto y legitimo
   cambioTurno(movimiento:Array<number>):boolean {
     for (const posibleJugAct of this.posiblesJugadas){
         if(movimiento.toString() == posibleJugAct.getPos().toString()){
-          console.log("Chupala!");
           return true;
         }
     }
     return false;
   }
 
+  // funcion que retorna un JSON con el estado actual del juego
   dataAct() {
     return { board: this.tableroGS.tableroJuego, 
       score: this.puntaje, 
@@ -113,6 +111,7 @@ export default class GameState {
     };
   }
 
+  // funcion que retorna un array con las posibles jugadas que tiene un jugador por turno
   getJugadas(){
     return this.posiblesJugadas;
   }
