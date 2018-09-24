@@ -9,7 +9,9 @@ var cors = require("cors")
 
 //Variables Globales
 
-
+app.get("/",(req,res)=>{
+  res.send("Bienvenidos al server del Othello")
+})
 
 app.use(express.json())
 app.use(cors())
