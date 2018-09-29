@@ -3,6 +3,9 @@ module.exports = function(app) {
     var gameServer = require('../controllers/WSController');
 
     // Lista de rutas del servidor
+
+    app.get("/", (req,res)=>{res.send("Root de la pagina")})
+
     app.post("/newGame", gameServer.newGame)
 
     app.route("/getGameStatus/:id")
