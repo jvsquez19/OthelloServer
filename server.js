@@ -14,7 +14,7 @@ app.use(express.json())
 routes(app)
 socket(http)
 
-http.listen(5000, () => {
+http.listen(process.env.PORT || 3000, () => {
   console.log('Server started on port 3000');
 });
 
