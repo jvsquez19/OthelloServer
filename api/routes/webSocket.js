@@ -21,7 +21,6 @@ module.exports = function(http) {
         })
 
         socket.on('join-match', (data) => {
-            Conexiones[data.user.uid] = socket.id
             console.log(data)
             var joined = partidasPendientes.pop(data.id)
             joined.player2 = data.user.displayName
@@ -35,10 +34,14 @@ module.exports = function(http) {
             io.sockets.connected[Conexiones[joined.player2uid]].emit("match-created", { id: partidasEnCurso.length - 1, state: newGameState.dataAct(), config: newGameState.config })
         })
 
-        socket.on("start-match", (data) => {
-            console.log("StartServer");
-            var joined = partidasPendientes[data.id];
-            io.sockets.connected[Conexiones[joined.player1uid]].emit("player-found", { player2: data.user.displayName, player2uid: data.user.player2uid })
+        socket.on("try-join", (data) => {
+            Conexiones[data.user.uid] = socket.id
+            var joined = partidasPendientes[data.id]
+            io.sockets.connected[Conexiones[joined.player1uid]].emit("oponent-found",data)
+        })
+
+        socket.on("join-refused", (oponent)=>{
+            io.sockets.connected[Conexiones[oponent]].emit("join-refused")
         })
 
         socket.on("create-match", (nuevaPartida) => {

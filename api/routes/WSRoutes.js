@@ -5,6 +5,8 @@ module.exports = function(app) {
     // Lista de rutas del servidor
     app.post("/newGame", gameServer.newGame)
 
+    app.get("/",(req,res)=>{res.send("Api del juego de Otello")})
+
     app.route("/getGameStatus/:id")
         .get(gameServer.getGamesStatus)
 
