@@ -1,7 +1,7 @@
 //Dependencias
 const express = require('express')
 const app = express()
-const http = require('http').createServer(app);
+const http = require('http').Server(app);
 var socket = require('./api/routes/webSocket')
 var routes = require("./api/routes/WSRoutes")
 var cors = require("cors")
